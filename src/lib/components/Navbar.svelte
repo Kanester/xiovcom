@@ -147,7 +147,7 @@
 
 			.nav-brand {
 				.hamburger {
-					display: none;
+					display: none !important;
 				}
 			}
 		}
