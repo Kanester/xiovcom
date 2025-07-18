@@ -27,6 +27,7 @@
 		"mdsvex": "^0.12.3",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
+		"sass-embedded": "^1.89.2",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
@@ -35,10 +36,12 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@vercel/speed-insights",
 			"esbuild"
 		]
 	},
 	"dependencies": {
-		"@vercel/analytics": "^1.5.0"
+		"@vercel/analytics": "^1.5.0",
+		"@vercel/speed-insights": "^1.2.0"
 	}
 }
