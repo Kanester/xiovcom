@@ -1,7 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
-	const { posts, meta } = data;
-	const grouped = Object.groupBy(posts, (post) => post.category);
+	const { meta } = data;
 </script>
 
 <svelte:head>
@@ -12,16 +11,3 @@
 	<meta name="twitter:title" content={meta.title} />
 	<meta name="twitter:description" content={meta.desc} />
 </svelte:head>
-
-<h1>Blog</h1>
-
-{#each Object.entries(grouped) as [category, groupedPosts]}
-	<strong>{category}</strong>
-	<ul>
-		{#each groupedPosts as post}
-			<li>
-				<a href={`/blog/${post.category}/${post.slug}`}>{post.title}</a>
-			</li>
-		{/each}
-	</ul>
-{/each}
