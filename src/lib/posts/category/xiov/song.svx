@@ -1,8 +1,0 @@
----
-title: "Lovely Songs"
-category: "music"
-date: "2025-07-18"
-description: "music"
----
-
-Here’s a chill post about music 🎵
