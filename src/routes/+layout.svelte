@@ -14,7 +14,7 @@
 	<meta name="twitter:description" content={meta.desc} />
 </svelte:head>
 
-	<Navbar />
+<Navbar />
 
 <main>
 	{@render children()}
