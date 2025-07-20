@@ -13,6 +13,6 @@
 	<meta name="twitter:description" content={post.description} />
 </svelte:head>
 
-<main>
+<section>
 	{@render component()}
-</main>
+</section>

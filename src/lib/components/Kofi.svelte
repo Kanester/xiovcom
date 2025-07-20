@@ -13,7 +13,7 @@
 	}
 
 	#kofi-btn button {
-		background-color: $accent-blue;
+		background-color: $accent-red;
 		color: white;
 		padding: 12px 20px;
 		font-size: 16px;
