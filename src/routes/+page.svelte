@@ -68,7 +68,7 @@
 		whether experimental or released.
 	</p>
 	<p>Feel free to explore and learn through blogs that I made and will make!</p>
-
+	<span><strong>PS</strong>: I made this site with phone, so i dunno how this will it look at bigger screens! My previewer is not so reliable.</span>
 	<div class="btn-wrap">
 		<a href="/blog"><button>Blogs</button></a>
 		<a href="/project"><button>Projects</button></a>
