@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { PageLoad } from './$types';
-	const { data }: PageLoad = $props();
+	const { data } = $props();
 	const { meta } = data;
 
 	let text = $state('XiövCom');
@@ -62,13 +61,12 @@
 		<span class="cursor" class:blinking={isTyping}>|</span>
 	</h1>
 
-	<p>Hello and welcome, dear visitor! You're currently inside Kiö's workplace called XiövCom.</p>
-	<p>
+	<p>Hello and welcome, dear visitor! You're currently inside Kiö's workplace called XiövCom.
 		This is where I — Kiö — dump my thoughts, tips, and learning resources as well my projects;
 		whether experimental or released.
 	</p>
 	<p>Feel free to explore and learn through blogs that I made and will make!</p>
-	<span><strong>PS</strong>: I made this site with phone, so i dunno how this will it look at bigger screens! My previewer is not so reliable.</span>
+	<span class="ps"><strong>PS:</strong> I made this site with phone, so i dunno how this will it look at bigger screens! My previewer is not so reliable.</span>
 	<div class="btn-wrap">
 		<a href="/blog"><button>Blogs</button></a>
 		<a href="/project"><button>Projects</button></a>
@@ -80,16 +78,12 @@
 	<p>
 		Hey, I'm Kiö — a senior high school student currently taking Accountancy and Business Management
 		strand. But let’s be real, I spend most of my free time coding just for fun.
-	</p>
-	<p>
 		I'm completely self-taught. I learn by watching YouTube tutorials, messing around with code, and
 		reading documentation when I need answers.
 	</p>
 	<p>
 		I like building experimental stuff — random ideas that pop into my head. Though, I dream of
 		creating something meaningful that could actually help people someday.
-	</p>
-	<p>
 		Outside of coding, I’m into JPop and indie-pop music. I also write stories and poems when I’m in
 		the mood for something more chill and creative.
 	</p>
@@ -129,18 +123,17 @@
 	</article>
 </section>
 
+
 <style lang="scss">
 	@use 'sass:color';
 	@use '$styles/variables' as *;
-	@import url('https://fonts.googleapis.com/css2?family=Mogra&display=swap');
-
-	section {
-		padding: 2rem 1.25rem;
-		margin: 0 auto;
-		max-width: 900px;
-
-		& + section {
-			margin-top: 1rem;
+	
+	.ps {
+		color: rgba($text-color, 0.75);
+		font-size: clamp(0.5rem, 0.75rem, 1rem);
+		
+		strong {
+			color: $text-color;
 		}
 	}
 
@@ -173,54 +166,53 @@
 		}
 	}
 
-	p {
-		font-size: clamp(0.95rem, 1vw + 0.75rem, 1.1rem);
-		line-height: 1.75;
-		color: $text-color;
-		margin-bottom: 1rem;
-	}
-
 	h2 {
 		color: $accent-blue;
 		font-size: clamp(1.3rem, 1.1vw + 1rem, 1.75rem);
 		margin-bottom: 1rem;
 	}
 
-	.btn-wrap {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		margin-top: 1.5rem;
+.btn-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
 
-		a {
-			text-decoration: none;
-
+	a {
+		text-decoration: none;
+		
 			button {
-				width: 100%;
-				padding: 0.75rem 1.25rem;
-				font-size: 1rem;
-				background-color: $accent-blue;
-				color: white;
-				border: none;
-				border-radius: 0.5rem;
-				cursor: pointer;
-				transition: background-color 0.2s ease;
+		width: 100%;
+		padding: 0.75rem 1.25rem;
+		font-size: 1rem;
+		background-color: $accent-blue;
+		color: white;
+		border: none;
+		border-radius: 0.5rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
 
-				&:hover {
-					background-color: color.adjust($accent-blue, $lightness: 5%);
-				}
-			}
-		}
-
-		@media (min-width: 600px) {
-			flex-direction: row;
-
-			a button {
-				width: auto;
-				min-width: 120px;
-			}
+		&:hover {
+			background-color: color.adjust($accent-blue, $lightness: 5%);
 		}
 	}
+	}
+	
+		a:first-of-type button {
+			background-color: rgba($accent-green, 0.7);
+			&:hover {
+		background-color: color.adjust(rgba($accent-green, 0.7), $lightness: 5%);}
+	}
+
+	@media (min-width: 600px) {
+		flex-direction: row;
+
+		button {
+			width: auto;
+			min-width: 120px;
+		}
+	}
+}
 
 	.card-wrap {
 		display: flex;

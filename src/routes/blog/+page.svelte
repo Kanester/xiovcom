@@ -14,6 +14,8 @@
 </svelte:head>
 
 <h1>Blog</h1>
+<h3>What a rainy </h3>
+
 
 {#each Object.entries(grouped) as [category, groupedPosts]}
 	<strong>{category}</strong>
