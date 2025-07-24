@@ -11,3 +11,6 @@
 	<meta name="twitter:title" content={meta.title} />
 	<meta name="twitter:description" content={meta.desc} />
 </svelte:head>
+
+<h1>Projects</h1>
+<p>Still under construction!</p>

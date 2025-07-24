@@ -3,7 +3,7 @@ import { posts } from '$lib/posts';
 export async function GET() {
 	const urls = posts
 		.map(
-			(post) => `
+			post => `
 			<url>
 			<loc>https://xiovcom.vercel.com/blog/${post.category}/${post.slug}</loc>
 			<lastmod>${post.date}</lastmod>
@@ -41,12 +41,6 @@ export async function GET() {
 			<lastmod>2025-07-19</lastmod>
 			<changefreq>monthly</changefreq>
 			<priority>0.7</priority>
-		</url>
-		<url>
-			<loc>https://xiovcom.vercel.com/contact</loc>
-			<lastmod>2025-07-19</lastmod>
-			<changefreq>yearly</changefreq>
-			<priority>0.6</priority>
 		</url>
 			${urls}
 		</urlset>`.trim(),
