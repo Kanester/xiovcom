@@ -1,26 +1,34 @@
 <script lang="ts">
-	import "normalize.css";
+	import 'normalize.css';
 	const { children } = $props();
 </script>
 
 <svelte:head>
 	<title>XiövWrites — When knowledge meets creativity</title>
-	<meta name="title" content="XiövWrites — When knowledge meets creativity">
-	<meta name="description" content="XiövWrites is where knowledge meets creativity — a space for curious minds to explore insightful articles, fresh ideas, and creative writing. From practical guides to thought-provoking stories, XiövWrites blends learning with imagination to inspire and inform readers everywhere.">
-	<meta name="keywords" content="xiovwrites, creativity, knowledge, inspiration, storytelling, writing, blogging, learning, growth, ideas, education, wisdom, imagination, articles">
-	<meta name="robots" content="index, follow">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="language" content="English">
-	<meta name="author" content="Xiöv">
+	<meta name="title" content="XiövWrites — When knowledge meets creativity" />
+	<meta
+		name="description"
+		content="XiövWrites is where knowledge meets creativity — a space for curious minds to explore insightful articles, fresh ideas, and creative writing. From practical guides to thought-provoking stories, XiövWrites blends learning with imagination to inspire and inform readers everywhere."
+	/>
+	<meta
+		name="keywords"
+		content="xiovwrites, creativity, knowledge, inspiration, storytelling, writing, blogging, learning, growth, ideas, education, wisdom, imagination, articles"
+	/>
+	<meta name="robots" content="index, follow" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="English" />
+	<meta name="author" content="Xiöv" />
 
-	<meta name="color-scheme" content="dark">
-	<meta name="theme-color" content="#121212">
-	
-	<meta name="google-adsense-account" content="ca-pub-5629465522785733">
+	<meta name="color-scheme" content="dark" />
+	<meta name="theme-color" content="#121212" />
+
+	<meta name="google-adsense-account" content="ca-pub-5629465522785733" />
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-6PHHZXKKC3"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
+		function gtag() {
+			dataLayer.push(arguments);
+		}
 		gtag('js', new Date());
 
 		gtag('config', 'G-6PHHZXKKC3');
@@ -32,6 +40,24 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<meta name="apple-mobile-web-app-title" content="XiövWrites" />
 	<link rel="manifest" href="/site.webmanifest" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://xiovwrites.vercel.app/" />
+	<meta property="og:title" content="XiövWrites — When knowledge meets creativity" />
+	<meta
+		property="og:description"
+		content="XiövWrites is where knowledge meets creativity — a space for curious minds to explore insightful articles, fresh ideas, and creative writing. From practical guides to thought-provoking stories, XiövWrites blends learning with imagination to inspire and inform readers everywhere."
+	/>
+	<meta property="og:image" content="https://xiovwrites.vercel.app/openGraph.png" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:url" content="https://xiovwrites.vercel.app/" />
+	<meta name="twitter:title" content="XiövWrites — When knowledge meets creativity" />
+	<meta
+		name="twitter:description"
+		content="XiövWrites is where knowledge meets creativity — a space for curious minds to explore insightful articles, fresh ideas, and creative writing. From practical guides to thought-provoking stories, XiövWrites blends learning with imagination to inspire and inform readers everywhere."
+	/>
+	<meta name="twitter:image" content="https://xiovwrites.vercel.app/openGraph.png" />
 </svelte:head>
 
 <header>
@@ -61,7 +87,12 @@
 	:global(body) {
 		background: #121212;
 		color: #f1f1f1;
-		font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+		font-family:
+			system-ui,
+			-apple-system,
+			Segoe UI,
+			Roboto,
+			sans-serif;
 		margin: 0;
 		line-height: 1.6;
 	}
@@ -108,7 +139,7 @@
 	}
 
 	.links a::after {
-		content: "";
+		content: '';
 		position: absolute;
 		left: 0;
 		bottom: -4px;
