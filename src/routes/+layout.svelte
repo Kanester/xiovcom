@@ -17,15 +17,14 @@
 	<meta name="theme-color" content="#121212">
 	
 	<meta name="google-adsense-account" content="ca-pub-5629465522785733">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6PHHZXKKC3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-6PHHZXKKC3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
 
-  gtag('config', 'G-6PHHZXKKC3');
-</script>
-
+		gtag('config', 'G-6PHHZXKKC3');
+	</script>
 
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -44,8 +43,8 @@
 			</a>
 		</div>
 		<div class="links">
-			<a href="#">Labs</a>
-			<a href="#">Courses</a>
+			<a href="/labs">Labs</a>
+			<a href="/courses">Courses</a>
 		</div>
 	</nav>
 </header>
