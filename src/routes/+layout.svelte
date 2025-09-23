@@ -83,7 +83,13 @@
 	<p>Copyright &copy; 2025 <strong>XiövWrites</strong> — Made with ❤️ & curiosity.</p>
 </footer>
 
-<style>
+<style lang="scss">
+	:global(html) {
+		html {
+			scroll-behavior: smooth;
+		}
+	}
+
 	:global(body) {
 		background: #121212;
 		color: #f1f1f1;
