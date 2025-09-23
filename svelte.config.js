@@ -10,8 +10,10 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'$component/*': './src/lib/components/*',
-			'$styles/*': './src/lib/styles/*'
+			'$ui/*': './src/lib/ui/*',
+			'$styles/*': './src/lib/scss/*',
+			'$scripts/*': './src/lib/ts/*',
+			'$blogs/*': './src/lib/blogs/*'
 		}
 	},
 	extensions: ['.svelte', '.svx']
