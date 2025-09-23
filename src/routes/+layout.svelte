@@ -83,24 +83,23 @@
 	<p>Copyright &copy; 2025 <strong>XiövWrites</strong> — Made with ❤️ & curiosity.</p>
 </footer>
 
-<style lang="scss">
-	:global(html) {
+<style>
+	:global {
 		html {
 			scroll-behavior: smooth;
 		}
-	}
-
-	:global(body) {
-		background: #121212;
-		color: #f1f1f1;
-		font-family:
-			system-ui,
-			-apple-system,
-			Segoe UI,
-			Roboto,
-			sans-serif;
-		margin: 0;
-		line-height: 1.6;
+		body {
+			background: #121212;
+			color: #f1f1f1;
+			font-family:
+				system-ui,
+				-apple-system,
+				Segoe UI,
+				Roboto,
+				sans-serif;
+			margin: 0;
+			line-height: 1.6;
+		}
 	}
 
 	header {

@@ -1,5 +1,5 @@
 const site = 'https://xiovwrites.vercel.com';
-const pages: string[] = [];
+const pages: string[] = ['labs', 'courses'];
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
@@ -20,19 +20,19 @@ const sitemap = (pages: string[]) => `<?xml version="1.0" encoding="UTF-8" ?>
   xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
 >
 	<url>
-		<loc>${site}</loc>
+		<loc>${site}/</loc>
 		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<priority>0.8</priority>
 	</url>
   ${pages
-		.map(
-			(page) => `
+			.map(
+				page => `
   <url>
-    <loc>${site}/${page}</loc>
+    <loc>${site}/${page}/</loc>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   `
-		)
-		.join('')}
+			)
+			.join('')}
 </urlset>`;
