@@ -11,7 +11,7 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'$ui/*': './src/lib/ui/*',
-			'$styles/*': './src/lib/scss/*',
+			$styles: './src/lib/styles/global.scss',
 			'$scripts/*': './src/lib/ts/*',
 			'$blogs/*': './src/lib/blogs/*'
 		}

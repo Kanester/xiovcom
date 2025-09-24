@@ -1,0 +1,102 @@
+@use 'mixins' as *;
+
+.hero {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: clamp(2rem, 5vw, 4rem) 1rem;
+	font-weight: 400;
+
+	h1 {
+		@include clamp-text(2rem, 5vw, 3rem);
+		margin-bottom: clamp(1rem, 2vw, 2rem);
+	}
+
+	p {
+		@include clamp-text(1.1rem, 2vw, 1.4rem);
+		line-height: 1.5rem;
+		margin-bottom: clamp(1.3rem, 2.5vw, 1.8rem);
+		max-width: 700px;
+	}
+
+	a {
+		@include button-base(#ff6f61, #ff4b3c);
+	}
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: clamp(4rem, 8vw, 6rem) 1rem;
+	font-family: 'Poppins', sans-serif;
+
+	h1 {
+		@include section-heading;
+	}
+
+	p {
+		@include section-body;
+
+		span {
+			font-weight: 700;
+			font-size: 1.15em;
+		}
+	}
+
+	a {
+		text-decoration: none;
+		border-radius: 8px;
+		font-weight: 600;
+		padding: 0.7rem 1.8rem;
+		transition: all 0.3s ease;
+		@include clamp-text(1rem, 2.5vw, 1.2rem);
+		letter-spacing: 0.5px;
+		color: #fff;
+
+		&:hover {
+			transform: scale(1.08);
+		}
+	}
+}
+
+/* Section themes */
+#truth {
+	h1 {
+		background: #009688;
+	}
+	span {
+		color: #009688;
+	}
+}
+
+#solution {
+	h1 {
+		background: #ff9800;
+	}
+	span {
+		color: #ff9800;
+	}
+}
+
+#fun {
+	h1 {
+		background: #9c27b0;
+	}
+	span {
+		color: #9c27b0;
+	}
+}
+
+#go {
+	h1 {
+		background: #2196f3;
+	}
+	span {
+		color: #2196f3;
+	}
+}
