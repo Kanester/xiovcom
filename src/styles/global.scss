@@ -1,0 +1,21 @@
+// ================================
+// Global Styles
+// ================================
+
+@forward 'variables';
+@forward 'base';
+@forward 'mixins';
+
+@forward 'layout/header';
+@forward 'layout/main';
+@forward 'layout/footer';
+
+@forward 'pages/landing';
+@forward 'pages/home';
+@forward 'pages/courses';
+@forward 'pages/labs';
+@forward 'pages/profile';
+
+@forward 'components/navigation';
+@forward 'components/icons';
+@forward 'components/forms';

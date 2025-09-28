@@ -1,0 +1,30 @@
+// ==============================
+// Media Queries & Modes
+// ==============================
+
+$breakpoints: (
+	'sm': 480px,
+	'md': 768px,
+	'lg': 1024px,
+	'xl': 1280px
+);
+
+@mixin respond($break) {
+	@if map-has-key($breakpoints, $break) {
+		@media (min-width: map-get($breakpoints, $break)) {
+			@content;
+		}
+	}
+}
+
+@mixin dark-mode {
+	@media (prefers-color-scheme: dark) {
+		@content;
+	}
+}
+
+@mixin print {
+	@media print {
+		@content;
+	}
+}

@@ -1,0 +1,42 @@
+// ==============================
+// Helpers
+// ==============================
+
+@use '../variables' as *;
+
+@mixin shadow($level: sm) {
+	@if $level == sm {
+		box-shadow: $shadow-sm;
+	}
+	@if $level == md {
+		box-shadow: $shadow-md;
+	}
+	@if $level == lg {
+		box-shadow: $shadow-lg;
+	}
+}
+
+@mixin spacing($property, $size) {
+	#{$property}: $size;
+}
+
+@mixin z($layer) {
+	@if $layer == header {
+		z-index: $z-header;
+	}
+	@if $layer == modal {
+		z-index: $z-modal;
+	}
+	@if $layer == overlay {
+		z-index: $z-overlay;
+	}
+}
+
+@mixin icon($size: 1em, $color: currentColor) {
+	display: inline-block;
+	width: $size;
+	height: $size;
+	fill: $color;
+	vertical-align: middle;
+	flex-shrink: 0;
+}

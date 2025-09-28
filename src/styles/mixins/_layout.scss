@@ -1,0 +1,54 @@
+// ==============================
+// Layout Mixins (updated)
+// ==============================
+
+@use '../variables' as *;
+
+@mixin container($max: 1200px, $pad: $spacing-md) {
+	width: 100%;
+	max-width: $max;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: $pad;
+	padding-right: $pad;
+	box-sizing: border-box;
+}
+
+@mixin fluid-container($pad-vertical: $spacing-md, $pad-horizontal: $spacing-md) {
+	width: 100%;
+	box-sizing: border-box;
+	padding-block: clamp($pad-vertical, 2vw, $pad-vertical * 2);
+	padding-inline: clamp($pad-horizontal, 3vw, $pad-horizontal * 2);
+}
+
+@mixin container-wrap($pad-vertical: $spacing-lg, $pad-horizontal: $spacing-md) {
+	@include fluid-container($pad-vertical, $pad-horizontal);
+	position: relative;
+	overflow: visible;
+}
+
+@mixin flex-center($dir: row, $justify: center, $align: center) {
+	display: flex;
+	flex-direction: $dir;
+	justify-content: $justify;
+	align-items: $align;
+}
+
+@mixin grid($cols: 12, $gap: $spacing-md) {
+	display: grid;
+	grid-template-columns: repeat($cols, 1fr);
+	gap: $gap;
+}
+
+@mixin aspect-ratio($w, $h) {
+	position: relative;
+	&::before {
+		content: '';
+		display: block;
+		padding-top: ($h / $w) * 100%;
+	}
+	> * {
+		position: absolute;
+		inset: 0;
+	}
+}

@@ -1,0 +1,60 @@
+// ==============================
+// Components
+// ==============================
+
+@use '../variables' as *;
+
+@mixin button-base($bg, $hover-bg, $color: #fff) {
+	padding: clamp(0.5rem, 1vw, 0.8rem) clamp(1rem, 3vw, 1.5rem);
+	border-radius: 8px;
+	font-weight: 500;
+	text-decoration: none;
+	color: $color;
+	background: $bg;
+	cursor: pointer;
+	border: none;
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: $hover-bg;
+		transform: scale(1.05);
+	}
+}
+
+@mixin card($bg: $color-dark, $shadow: $shadow-md, $radius: $radius-md, $pad: $spacing-md) {
+	background: $bg;
+	border-radius: $radius;
+	box-shadow: $shadow;
+	padding: $pad;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: $shadow-lg;
+	}
+}
+
+@mixin modal($bg: $color-dark, $radius: $radius-md, $width: clamp(300px, 90%, 500px)) {
+	background: $bg;
+	border-radius: $radius;
+	padding: $spacing-lg;
+	position: fixed;
+	inset: 50% auto auto 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: $shadow-lg;
+	width: $width;
+	z-index: $z-modal;
+}
+
+@mixin tooltip($bg: $color-dark, $color: $color-light) {
+	position: absolute;
+	background: $bg;
+	color: $color;
+	padding: 0.4rem 0.6rem;
+	font-size: 0.85rem;
+	border-radius: $radius-sm;
+	white-space: nowrap;
+	box-shadow: $shadow-sm;
+}

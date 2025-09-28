@@ -1,0 +1,23 @@
+@use '../mixins' as *;
+
+$button-color: #00ff7f;
+
+header {
+	@include fluid-container;
+	@include fluid-type(1rem, 2rem);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	button {
+		@include button-base(transparent, rgba(0, 255, 127, 0.1), $button-color);
+		background: none;
+		border: solid 1px $button-color;
+		color: $button-color;
+		text-shadow: none;
+
+		&:hover {
+			text-shadow: 0 0 6px $button-color;
+		}
+	}
+}

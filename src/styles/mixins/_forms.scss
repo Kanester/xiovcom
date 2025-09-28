@@ -1,0 +1,81 @@
+// ==============================
+// Forms
+// ==============================
+
+@use '../variables' as *;
+
+@mixin input-base($bg: #2a2a2a, $border: #444, $focus: $color-primary) {
+	width: 100%;
+	padding: $spacing-sm $spacing-md;
+	border-radius: $radius-sm;
+	border: 1px solid $border;
+	background: $bg;
+	color: $color-light;
+	transition:
+		border 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:focus {
+		outline: none;
+		border-color: $focus;
+		box-shadow: 0 0 0 2px rgba($focus, 0.3);
+	}
+}
+
+@mixin checkbox($size: 1.1rem, $color: $color-primary) {
+	width: $size;
+	height: $size;
+	border-radius: 3px;
+	border: 2px solid #555;
+	appearance: none;
+	cursor: pointer;
+	position: relative;
+
+	&:checked {
+		background: $color;
+		border-color: $color;
+	}
+}
+
+@mixin switch($width: 2.5rem, $height: 1.4rem, $color: $color-primary) {
+	position: relative;
+	display: inline-block;
+	width: $width;
+	height: $height;
+
+	input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+
+		&:checked + .slider {
+			background: $color;
+		}
+
+		&:checked + .slider::before {
+			transform: translateX($width - $height);
+		}
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #555;
+		border-radius: $height;
+		transition: background 0.3s ease;
+
+		&::before {
+			content: '';
+			position: absolute;
+			width: $height;
+			height: $height;
+			border-radius: 50%;
+			background: white;
+			transition: transform 0.3s ease;
+		}
+	}
+}

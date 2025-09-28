@@ -1,0 +1,67 @@
+// ==============================
+// Animations
+// ==============================
+
+@mixin fade-in($time: 0.5s) {
+	animation: fadeIn $time ease both;
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@mixin slide-up($time: 0.5s, $distance: 20px) {
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(#{$distance});
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	animation: slideUp $time ease both;
+}
+
+@mixin spin($time: 1s) {
+	animation: spin $time linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@mixin pulse($time: 1.5s) {
+	animation: pulse $time ease-in-out infinite;
+}
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+@mixin skeleton($color: #2a2a2a, $highlight: #3a3a3a) {
+	background: linear-gradient(90deg, $color 25%, $highlight 50%, $color 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+	from {
+		background-position: 200% 0;
+	}
+	to {
+		background-position: -200% 0;
+	}
+}

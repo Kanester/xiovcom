@@ -1,9 +1,8 @@
-<script>
-	import 'normalize.css';
-	import '$styles';
-
+<script lang="ts">
 	const { children } = $props();
 </script>
+
+<header></header>
 
 <main>
 	{@render children?.()}

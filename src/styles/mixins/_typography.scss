@@ -1,0 +1,42 @@
+// ==============================
+// Typography Mixins
+// ==============================
+
+@use '../variables' as *;
+@use 'sass:color';
+
+@mixin fluid-type($min, $max, $vw-min: 320, $vw-max: 1440) {
+	font-size: clamp(
+		#{$min},
+		#{$min} + (#{$max} - #{$min}) * ((100vw - #{$vw-min}px) / (#{$vw-max} - #{$vw-min})),
+		#{$max}
+	);
+}
+
+@mixin heading($size: 2rem, $weight: 700, $spacing: -0.5px) {
+	font-family: $font-sans;
+	font-size: $size;
+	font-weight: $weight;
+	letter-spacing: $spacing;
+	line-height: 1.2;
+}
+
+@mixin body-text($size: 1rem, $weight: 400, $color: $color-light) {
+	font-family: $font-sans;
+	font-size: $size;
+	font-weight: $weight;
+	color: $color;
+	line-height: 1.6;
+}
+
+@mixin small-text {
+	@include body-text(0.85rem, 400, color.adjust($color-light, $lightness: 10%));
+}
+
+@mixin code-text {
+	font-family: $font-mono;
+	background: rgba(0, 0, 0, 0.4);
+	padding: 0.2em 0.4em;
+	border-radius: $radius-sm;
+	font-size: 0.9em;
+}
