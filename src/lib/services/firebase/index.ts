@@ -5,7 +5,6 @@ export {
 	signUp,
 	login,
 	loginWithGoogle,
-	loginWithFacebook,
 	loginWithGithub,
 	logout,
 	getCurrentUser

@@ -5,7 +5,6 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	GoogleAuthProvider,
-	FacebookAuthProvider,
 	GithubAuthProvider,
 	signInWithPopup,
 	type User
@@ -46,17 +45,6 @@ export async function loginWithGoogle(): Promise<User> {
 		return result.user;
 	} catch (err: any) {
 		console.error('Google login error:', err.code, err.message);
-		throw err;
-	}
-}
-
-export async function loginWithFacebook(): Promise<User> {
-	try {
-		const provider = new FacebookAuthProvider();
-		const result = await signInWithPopup(auth, provider);
-		return result.user;
-	} catch (err: any) {
-		console.error('Facebook login error:', err.code, err.message);
 		throw err;
 	}
 }
