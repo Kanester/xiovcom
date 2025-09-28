@@ -2,15 +2,38 @@
 	import AuthModal from '$assets/interface/forms/AuthModal.svelte';
 	import { showAuthModal } from '$stores/auth';
 	import { user } from '$stores/user';
+
+	let dropdownOpen = false;
 </script>
 
 <header>
 	<h1>XiövWrites</h1>
-	<button
-		on:click={() => {
-			showAuthModal.set(true);
-		}}>Sign In</button
-	>
+
+	{#if $user}
+		<div class="profile">
+			<button
+				class="avatar-btn"
+				on:click={() => (dropdownOpen = !dropdownOpen)}
+				aria-label="Profile menu"
+			>
+				<img
+					src={$user.photoURL ?? 'https://api.dicebear.com/7.x/identicon/svg?seed=guest'}
+					alt="Profile"
+					class="avatar"
+				/>
+			</button>
+
+			{#if dropdownOpen}
+				<div class="dropdown">
+					<p class="username">{$user.displayName ?? $user.email}</p>
+					<a href="/app">Dashboard</a>
+					<button on:click={() => showAuthModal.set(true)}>Sign Out</button>
+				</div>
+			{/if}
+		</div>
+	{:else}
+		<button on:click={() => showAuthModal.set(true)}>Sign In</button>
+	{/if}
 </header>
 
 <AuthModal />

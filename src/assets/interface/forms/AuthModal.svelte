@@ -4,6 +4,7 @@
 	import SignIn from './SignIn.svelte';
 	import SignOut from './SignOut.svelte';
 	import { showAuthModal, showSignUp, showSignOut } from '$stores/auth';
+	import { user } from "$stores/user";
 </script>
 
 {#if $showAuthModal}
@@ -23,7 +24,7 @@
 			<SignUp />
 		{/if}
 
-		{#if $showSignOut}
+		{#if $user && $showSignOut}
 			<SignOut />
 		{/if}
 	</div>
