@@ -23,8 +23,12 @@
 			<p>Or sign up with email</p>
 			<SignUp />
 		{/if}
+	</div>
+{/if}
 
-		{#if $user && $showSignOut}
+{#if $showSignOut}
+	<div class="authModal">
+				{#if $user}
 			<SignOut />
 		{/if}
 	</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AuthModal from '$assets/interface/forms/AuthModal.svelte';
-	import { showAuthModal } from '$stores/auth';
+	import { showAuthModal, showSignOut } from '$stores/auth';
 	import { user } from '$stores/user';
 
 	let dropdownOpen = false;
@@ -27,7 +27,7 @@
 				<div class="dropdown">
 					<p class="username">{$user.displayName ?? $user.email}</p>
 					<a href="/app">Dashboard</a>
-					<button on:click={() => showAuthModal.set(true)}>Sign Out</button>
+					<button on:click={() => showSignOut.set(true)}>Sign Out</button>
 				</div>
 			{/if}
 		</div>
