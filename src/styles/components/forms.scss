@@ -15,6 +15,10 @@
 		text-align: center;
 		color: white;
 	}
+	
+	.actions button {
+		@include button-base(#4f46e5, #4f46e5, white)
+	}
 }
 
 .authForm {
