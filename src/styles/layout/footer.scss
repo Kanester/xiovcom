@@ -1,7 +1,0 @@
-@use '../mixins' as *;
-
-footer {
-	@include fluid-container;
-	@include small-text;
-	text-align: center;
-}

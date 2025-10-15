@@ -1,8 +1,6 @@
 import { app } from './app';
 import {
 	getAuth,
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
 	signOut,
 	GoogleAuthProvider,
 	GithubAuthProvider,
@@ -11,29 +9,6 @@ import {
 } from 'firebase/auth';
 
 export const auth = getAuth(app);
-
-// -------------------------
-// EMAIL / PASSWORD
-// -------------------------
-export async function signUp(email: string, password: string): Promise<User> {
-	try {
-		const userCred = await createUserWithEmailAndPassword(auth, email, password);
-		return userCred.user;
-	} catch (err: any) {
-		console.error('SignUp error:', err.code, err.message);
-		throw err;
-	}
-}
-
-export async function login(email: string, password: string): Promise<User> {
-	try {
-		const userCred = await signInWithEmailAndPassword(auth, email, password);
-		return userCred.user;
-	} catch (err: any) {
-		console.error('Login error:', err.code, err.message);
-		throw err;
-	}
-}
 
 // -------------------------
 // SOCIAL LOGIN

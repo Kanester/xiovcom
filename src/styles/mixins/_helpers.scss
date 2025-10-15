@@ -32,7 +32,7 @@
 	}
 }
 
-@mixin icon($size: 1em, $color: currentColor) {
+@mixin icons($size: 1em, $color: currentColor) {
 	display: inline-block;
 	width: $size;
 	height: $size;

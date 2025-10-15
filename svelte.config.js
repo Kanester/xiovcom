@@ -10,7 +10,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$styles: './src/styles/global.scss',
+			'$styles/*': './src/styles/*',
 			'$stores/*': './src/stores/*',
 			'$assets/*': './src/assets/*'
 		}
