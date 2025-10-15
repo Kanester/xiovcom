@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
 import { auth } from '$lib/services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { showAuthModal } from './auth';
 
 export const user = writable(auth.currentUser);
 
-onAuthStateChanged(auth, (firebaseUser) => {
+onAuthStateChanged(auth, firebaseUser => {
 	user.set(firebaseUser);
 	showAuthModal.set(false);
 });

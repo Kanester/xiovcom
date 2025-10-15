@@ -1,5 +1,5 @@
 <script lang="ts">
-import { loginWithGoogle, loginWithGithub } from '$lib/services/firebase';
+import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/firebase';
 	import { fade, scale } from 'svelte/transition';
 	import { user } from '$stores/user';
 	import '$styles/global.scss';
@@ -18,6 +18,8 @@ import { loginWithGoogle, loginWithGithub } from '$lib/services/firebase';
 		user.set(null);
 		dropdownOpen = false;
 	};
+	
+	console.log(getCurrentUser())
 </script>
 
 <header>
