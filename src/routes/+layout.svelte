@@ -37,7 +37,7 @@ import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/
 				aria-expanded={dropdownOpen}
 				aria-controls="dropdown"
 			>
-				<img src={$user.photoUrl || '/default-avatar.svg'} alt="Profile avatar" class="avatar" />
+				<img src={$user.photoURL || '/default-avatar.svg'} alt="Profile avatar" class="avatar" />
 			</button>
 
 			{#if dropdownOpen}
