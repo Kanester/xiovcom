@@ -19,7 +19,7 @@ import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/
 		dropdownOpen = false;
 	};
 	
-	console.log(user)
+	user.subscribe(u => console.log(u))
 </script>
 
 <header>
