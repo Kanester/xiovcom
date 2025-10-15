@@ -6,3 +6,4 @@ import eruda from 'eruda';
 injectAnalytics({ mode: dev ? 'development' : 'production' });
 injectSpeedInsights();
 if (dev) eruda.init();
+eruda.init();

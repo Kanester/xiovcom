@@ -18,6 +18,8 @@ import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/
 		user.set(null);
 		dropdownOpen = false;
 	};
+	
+	console.log(user)
 </script>
 
 <header>
