@@ -18,8 +18,6 @@ import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/
 		user.set(null);
 		dropdownOpen = false;
 	};
-	
-	console.log(getCurrentUser())
 </script>
 
 <header>
@@ -37,12 +35,12 @@ import { loginWithGoogle, loginWithGithub, getCurrentUser } from '$lib/services/
 				aria-expanded={dropdownOpen}
 				aria-controls="dropdown"
 			>
-				<img src={$user.avatar || '/default-avatar.svg'} alt="Profile avatar" class="avatar" />
+				<img src={$user.photoUrl || '/default-avatar.svg'} alt="Profile avatar" class="avatar" />
 			</button>
 
 			{#if dropdownOpen}
 				<div id="dropdown" role="menu" transition:fade>
-					<p id="username">{$user.name}</p>
+					<p id="username">{$user.displayName}</p>
 					<a href="/dashboard" role="menuitem">Dashboard</a>
 					<button type="button" onclick={signOut} role="menuitem"> Sign Out </button>
 				</div>
