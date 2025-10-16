@@ -4,6 +4,6 @@ import { onAuthStateChanged, type User } from 'firebase/auth';
 
 export const user = writable(auth.currentUser);
 
-onAuthStateChanged(auth, firebaseUser => {
+onAuthStateChanged(auth, (firebaseUser) => {
 	user.set(firebaseUser);
 });

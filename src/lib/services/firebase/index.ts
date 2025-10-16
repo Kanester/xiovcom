@@ -1,12 +1,6 @@
 export { app } from './app';
 
-export {
-	auth,
-	loginWithGoogle,
-	loginWithGithub,
-	logout,
-	getCurrentUser
-} from './auth';
+export { auth, loginWithGoogle, loginWithGithub, logout, getCurrentUser } from './auth';
 
 export {
 	db,
