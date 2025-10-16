@@ -3,8 +3,8 @@
 	import { fade } from "svelte/transition";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { loginWithGoogle, loginWithGithub, logout} from "$lib/services/firebase";
-	import { onAuthStateChanged, type User } from "firebase/auth";
+	import { auth, loginWithGoogle, loginWithGithub, logout } from "$lib/services/firebase/auth";
+	import { onAuthStateChanged, signOut as fbSignOut, type User } from "firebase/auth";
 
 	let { children } = $props();
 
@@ -13,18 +13,44 @@
 	let loading = $state(true);
 	let currentUser: User | null = null;
 
-	// ✅ Setup auth state listener ONCE
 	$effect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			currentUser = user;
-			loading = false;
-
-			// Redirect only if not already on /app
-			if (user && page.url.pathname !== "/app") {
-				goto("/app");
+		console.log("[layout] Setting up auth listener…");
+		// fallback if auth never responds in time
+		let done = false;
+		const timeout = setTimeout(() => {
+			if (!done) {
+				console.warn("[layout] Auth listener timeout — proceeding anyway");
+				loading = false;
 			}
-		});
-		return unsubscribe;
+		}, 5000);
+
+		const unsubscribe = onAuthStateChanged(
+			auth,
+			(user) => {
+				done = true;
+				clearTimeout(timeout);
+				console.log("[layout] auth state changed:", user);
+				currentUser = user;
+				loading = false;
+
+				if (user && page.url.pathname !== "/app") {
+					console.log("[layout] redirecting to /app");
+					goto("/app");
+				}
+			},
+			(error) => {
+				done = true;
+				clearTimeout(timeout);
+				console.error("[layout] auth listener error:", error);
+				loading = false;
+			}
+		);
+
+		return () => {
+			clearTimeout(timeout);
+			unsubscribe();
+			console.log("[layout] unsubscribed auth listener");
+		};
 	});
 
 	const toggle = (which: "dropdown" | "signin") => {
@@ -35,16 +61,21 @@
 	const closeModal = () => (signInOpen = false);
 
 	const signOut = async () => {
-		await logout();
-		currentUser = null;
-		dropdownOpen = false;
-		goto("/");
+		try {
+			await logout();
+			currentUser = null;
+			dropdownOpen = false;
+			goto("/");
+			console.log("[layout] signed out, navigated to /");
+		} catch (err) {
+			console.error("[layout] signOut error:", err);
+		}
 	};
 </script>
 
 {#if loading}
 	<div class="loading-screen" transition:fade={{ duration: 200 }}>
-		<div class="spinner"></div>
+		<div class="spinner" />
 		<p>Loading XiövWrites…</p>
 	</div>
 {:else}
@@ -62,20 +93,14 @@
 					aria-expanded={dropdownOpen}
 					aria-controls="dropdown"
 				>
-					<img
-						src={currentUser.photoURL ?? "/default-avatar.svg"}
-						alt="User avatar"
-						class="avatar"
-					/>
+					<img src={currentUser.photoURL ?? "/default-avatar.svg"} alt="User avatar" class="avatar" />
 				</button>
 
 				{#if dropdownOpen}
 					<div id="dropdown" role="menu" transition:fade>
 						<p id="username">{currentUser.displayName}</p>
 						<a href="/app" role="menuitem">Dashboard</a>
-						<button type="button" on:click={signOut} role="menuitem">
-							Sign Out
-						</button>
+						<button type="button" on:click={signOut} role="menuitem">Sign Out</button>
 					</div>
 				{/if}
 			</div>
@@ -114,7 +139,6 @@
 						</svg>
 						<span>Log in with Google</span>
 					</button>
-
 					<button on:click={loginWithGithub} aria-label="Log in with GitHub">
 						<svg height="32" width="32" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
 							<path
@@ -129,9 +153,8 @@
 		</div>
 	{/if}
 
-	{@render children?.()}
+	{@render children?.() }
 {/if}
-
 
 <style lang="scss">
 @use 'sass:color';
