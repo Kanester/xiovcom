@@ -1,9 +1,9 @@
 <script lang="ts">
-	import '$styles/global.scss';
-	import { fade } from 'svelte/transition';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { loginWithGoogle, loginWithGithub, onAuthStateChanged } from '$lib/services/firebase';
+	import "$styles/global.scss";
+	import { fade } from "svelte/transition";
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { loginWithGoogle, loginWithGithub, onAuthStateChanged, type User } from "$lib/services/firebase";
 
 	let dropdownOpen = $state(false);
 	let signInOpen = $state(false);
@@ -18,27 +18,27 @@
 			currentUser = user;
 			loading = false;
 
-			if (user && page.url.pathname !== '/app') {
-				goto('/app');
+			if (user && page.url.pathname !== "/app") {
+				goto("/app");
 			}
 		});
 		return () => unsubscribe();
 	});
 
-	const toggle = (which: 'dropdown' | 'signin') => {
-		if (which === 'dropdown') dropdownOpen = !dropdownOpen;
+	const toggle = (which: "dropdown" | "signin") => {
+		if (which === "dropdown") dropdownOpen = !dropdownOpen;
 		else signInOpen = !signInOpen;
 	};
 
 	const closeModal = () => (signInOpen = false);
 
 	const signOut = async () => {
-		const { signOut: fbSignOut } = await import('firebase/auth');
-		const { auth } = await import('$lib/services/firebase');
+		const { signOut: fbSignOut } = await import("firebase/auth");
+		const { auth } = await import("$lib/services/firebase");
 		await fbSignOut(auth);
 		currentUser = null;
 		dropdownOpen = false;
-		goto('/');
+		goto("/");
 	};
 </script>
 
@@ -58,15 +58,11 @@
 			<div id="profile">
 				<button
 					class="avatar-btn"
-					onclick={() => toggle('dropdown')}
+					onclick={() => toggle("dropdown")}
 					aria-expanded={dropdownOpen}
 					aria-controls="dropdown"
 				>
-					<img
-						src={currentUser.photoURL ?? '/default-avatar.svg'}
-						alt="User avatar"
-						class="avatar"
-					/>
+					<img src={currentUser.photoURL ?? "/default-avatar.svg"} alt="User avatar" class="avatar" />
 				</button>
 
 				{#if dropdownOpen}
@@ -78,7 +74,7 @@
 				{/if}
 			</div>
 		{:else}
-			<button id="signin" onclick={() => toggle('signin')}>Sign In</button>
+			<button id="signin" onclick={() => toggle("signin")}>Sign In</button>
 		{/if}
 	</header>
 
@@ -86,7 +82,7 @@
 		<div
 			id="authBackdrop"
 			onclick={closeModal}
-			onkeydown={(e) => (e.key === 'Escape' || e.key === 'Enter') && closeModal()}
+			onkeydown={(e) => (e.key === "Escape" || e.key === "Enter") && closeModal()}
 			role="presentation"
 			transition:fade
 		>
@@ -129,83 +125,219 @@
 	@render
 {/if}
 
+
 <style lang="scss">
-	@use 'sass:color';
-	@use '$styles/variables' as v;
-	@use '$styles/mixins' as *;
+@use 'sass:color';
+@use '$styles/variables' as v;
+@use "$styles/mixins" as *;
 
-	$button: #00ff7f;
-	$modal-bg: color.scale(v.$color-dark, $lightness: 4%);
-	$hover-bg: color.scale($button, $alpha: -0.85%);
-	$shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+$button: #00ff7f;
+$modal-bg: color.scale(v.$color-dark, $lightness: 4%);
+$hover-bg: color.scale($button, $alpha: -0.85%);
+$shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 
-	/* ========== Loading Screen ========== */
-	.loading-screen {
+/* ========== Loading Screen ========== */
+.loading-screen {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	background: #0f0f0f;
+	color: $button;
+	font-family: system-ui, sans-serif;
+	gap: 1rem;
+
+	p {
+		font-weight: 600;
+		font-size: 1.2rem;
+	}
+	.spinner {
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 3px solid rgba(0, 255, 127, 0.2);
+		border-top-color: $button;
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* ========== Header & Brand ========== */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem 2rem;
+	color: v.$color-light;
+	font-family: system-ui, sans-serif;
+
+	#brand {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+
+		img {
+			border-radius: 6px;
+		}
+		span {
+			font-weight: 600;
+			font-size: 1.25rem;
+		}
+	}
+
+	button {
+		background: none;
+		border: 1px solid $button;
+		color: $button;
+		padding: 0.45rem 1.1rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all 0.25s ease;
+		font-weight: 500;
+
+		&:hover {
+			text-shadow: 0 0 6px $button;
+			background-color: $hover-bg;
+			transform: translateY(-1px);
+		}
+
+		&:focus-visible {
+			outline: 2px solid $button;
+			outline-offset: 3px;
+		}
+	}
+}
+
+/* ========== Profile & Dropdown ========== */
+#profile {
+	position: relative;
+
+	.avatar-btn {
+		border: none;
+		background: transparent;
+		padding: 0;
+		cursor: pointer;
+		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 100vh;
-		background: #0f0f0f;
-		color: $button;
-		font-family: system-ui, sans-serif;
-		gap: 1rem;
+	}
 
-		p {
+	.avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		object-fit: cover;
+		transition: transform 0.2s ease;
+
+		&:hover {
+			transform: scale(1.05);
+		}
+	}
+
+	#dropdown {
+		position: absolute;
+		right: 0;
+		margin-top: 0.5rem;
+		background: #2a2a2a;
+		border-radius: 8px;
+		padding: 0.75rem 1rem;
+		box-shadow: $shadow;
+		min-width: 10rem;
+		z-index: 10;
+
+		#username {
 			font-weight: 600;
-			font-size: 1.2rem;
-		}
-		.spinner {
-			width: 2.5rem;
-			height: 2.5rem;
-			border: 3px solid rgba(0, 255, 127, 0.2);
-			border-top-color: $button;
-			border-radius: 50%;
-			animation: spin 0.8s linear infinite;
-		}
-	}
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	/* ========== Header & Brand ========== */
-	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1rem 2rem;
-		color: v.$color-light;
-		font-family: system-ui, sans-serif;
-
-		#brand {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-
-			img {
-				border-radius: 6px;
-			}
-			span {
-				font-weight: 600;
-				font-size: 1.25rem;
-			}
+			margin-bottom: 0.5rem;
 		}
 
+		a,
 		button {
+			display: block;
+			width: 100%;
+			text-align: left;
+			color: v.$color-light;
+			text-decoration: none;
 			background: none;
-			border: 1px solid $button;
-			color: $button;
-			padding: 0.45rem 1.1rem;
-			border-radius: 6px;
+			border: none;
+			padding: 0.45rem 0;
 			cursor: pointer;
-			transition: all 0.25s ease;
-			font-weight: 500;
+			transition: color 0.15s ease;
 
 			&:hover {
-				text-shadow: 0 0 6px $button;
-				background-color: $hover-bg;
+				color: #ffcc00;
+			}
+		}
+	}
+}
+
+/* ========== Auth Modal ========== */
+#authBackdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.65);
+	backdrop-filter: blur(6px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+#authModal {
+	background: $modal-bg;
+	color: v.$color-light;
+	border-radius: 14px;
+	padding: 2.25rem 2rem;
+	box-shadow: $shadow;
+	text-align: center;
+	position: relative;
+	width: min(90%, 400px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	transition: transform 0.25s ease;
+
+	h2 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+		font-weight: 600;
+		line-height: 1.3;
+	}
+
+	#provider {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		width: 100%;
+		margin-top: 0.5rem;
+
+		button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.6rem;
+			border: 1px solid $button;
+			border-radius: 6px;
+			padding: 0.7rem 1rem;
+			background: none;
+			color: $button;
+			cursor: pointer;
+			font-weight: 500;
+			width: 100%;
+			transition: all 0.25s ease;
+
+			svg {
+				@include icons(2em, v.$color-light);
+			}
+
+			&:hover {
+				background: $hover-bg;
+				text-shadow: 0 0 5px $button;
 				transform: translateY(-1px);
 			}
 
@@ -216,168 +348,33 @@
 		}
 	}
 
-	/* ========== Profile & Dropdown ========== */
-	#profile {
-		position: relative;
-
-		.avatar-btn {
-			border: none;
-			background: transparent;
-			padding: 0;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.avatar {
-			width: 40px;
-			height: 40px;
-			border-radius: 50%;
-			object-fit: cover;
-			transition: transform 0.2s ease;
-
-			&:hover {
-				transform: scale(1.05);
-			}
-		}
-
-		#dropdown {
-			position: absolute;
-			right: 0;
-			margin-top: 0.5rem;
-			background: #2a2a2a;
-			border-radius: 8px;
-			padding: 0.75rem 1rem;
-			box-shadow: $shadow;
-			min-width: 10rem;
-			z-index: 10;
-
-			#username {
-				font-weight: 600;
-				margin-bottom: 0.5rem;
-			}
-
-			a,
-			button {
-				display: block;
-				width: 100%;
-				text-align: left;
-				color: v.$color-light;
-				text-decoration: none;
-				background: none;
-				border: none;
-				padding: 0.45rem 0;
-				cursor: pointer;
-				transition: color 0.15s ease;
-
-				&:hover {
-					color: #ffcc00;
-				}
-			}
-		}
-	}
-
-	/* ========== Auth Modal ========== */
-	#authBackdrop {
-		position: fixed;
-		inset: 0;
-		background: rgba(0, 0, 0, 0.65);
-		backdrop-filter: blur(6px);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 1000;
-	}
-
-	#authModal {
-		background: $modal-bg;
+	.close-btn {
+		position: absolute;
+		top: 0.6rem;
+		right: 0.8rem;
+		background: none;
+		border: none;
 		color: v.$color-light;
-		border-radius: 14px;
-		padding: 2.25rem 2rem;
-		box-shadow: $shadow;
-		text-align: center;
-		position: relative;
-		width: min(90%, 400px);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
-		transition: transform 0.25s ease;
+		font-size: 1.5rem;
+		cursor: pointer;
+		line-height: 1;
+		padding: 0.25rem;
+		border-radius: 50%;
+		transition:
+			transform 0.25s ease,
+			color 0.25s ease,
+			background 0.25s ease;
 
-		h2 {
-			font-size: 1.5rem;
-			margin-bottom: 1rem;
-			font-weight: 600;
-			line-height: 1.3;
+		&:hover {
+			transform: rotate(90deg);
+			color: #ff5555;
+			background: rgba(255, 255, 255, 0.1);
 		}
 
-		#provider {
-			display: flex;
-			flex-direction: column;
-			gap: 0.75rem;
-			width: 100%;
-			margin-top: 0.5rem;
-
-			button {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 0.6rem;
-				border: 1px solid $button;
-				border-radius: 6px;
-				padding: 0.7rem 1rem;
-				background: none;
-				color: $button;
-				cursor: pointer;
-				font-weight: 500;
-				width: 100%;
-				transition: all 0.25s ease;
-
-				svg {
-					@include icons(2em, v.$color-light);
-				}
-
-				&:hover {
-					background: $hover-bg;
-					text-shadow: 0 0 5px $button;
-					transform: translateY(-1px);
-				}
-
-				&:focus-visible {
-					outline: 2px solid $button;
-					outline-offset: 3px;
-				}
-			}
-		}
-
-		.close-btn {
-			position: absolute;
-			top: 0.6rem;
-			right: 0.8rem;
-			background: none;
-			border: none;
-			color: v.$color-light;
-			font-size: 1.5rem;
-			cursor: pointer;
-			line-height: 1;
-			padding: 0.25rem;
-			border-radius: 50%;
-			transition:
-				transform 0.25s ease,
-				color 0.25s ease,
-				background 0.25s ease;
-
-			&:hover {
-				transform: rotate(90deg);
-				color: #ff5555;
-				background: rgba(255, 255, 255, 0.1);
-			}
-
-			&:focus-visible {
-				outline: 2px solid #ff5555;
-				outline-offset: 3px;
-			}
+		&:focus-visible {
+			outline: 2px solid #ff5555;
+			outline-offset: 3px;
 		}
 	}
+}
 </style>
