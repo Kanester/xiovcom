@@ -3,26 +3,28 @@
 	import { fade } from "svelte/transition";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { loginWithGoogle, loginWithGithub, onAuthStateChanged, type User } from "$lib/services/firebase";
+	import { loginWithGoogle, loginWithGithub, logout} from "$lib/services/firebase";
+	import { onAuthStateChanged, type User } from "firebase/auth";
+
+	let { children } = $props();
 
 	let dropdownOpen = $state(false);
 	let signInOpen = $state(false);
 	let loading = $state(true);
-	let initialized = false;
-	let currentUser: any = null;
+	let currentUser: User | null = null;
 
-	// --- Handle Firebase auth state ---
+	// ✅ Setup auth state listener ONCE
 	$effect(() => {
-		const unsubscribe = onAuthStateChanged((user) => {
-			initialized = true;
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			currentUser = user;
 			loading = false;
 
+			// Redirect only if not already on /app
 			if (user && page.url.pathname !== "/app") {
 				goto("/app");
 			}
 		});
-		return () => unsubscribe();
+		return unsubscribe;
 	});
 
 	const toggle = (which: "dropdown" | "signin") => {
@@ -33,23 +35,21 @@
 	const closeModal = () => (signInOpen = false);
 
 	const signOut = async () => {
-		const { signOut: fbSignOut } = await import("firebase/auth");
-		const { auth } = await import("$lib/services/firebase");
-		await fbSignOut(auth);
+		await logout();
 		currentUser = null;
 		dropdownOpen = false;
 		goto("/");
 	};
 </script>
 
-{#if loading && !initialized}
-	<div class="loading-screen" transition:fade={{ duration: 250 }}>
+{#if loading}
+	<div class="loading-screen" transition:fade={{ duration: 200 }}>
 		<div class="spinner"></div>
 		<p>Loading XiövWrites…</p>
 	</div>
 {:else}
 	<header class="header">
-		<div id="brand">
+		<div id="brand" on:click={() => goto("/")}>
 			<img src="/favicon.svg" alt="XiövWrites logo" width="32" height="32" />
 			<span>XiövWrites</span>
 		</div>
@@ -58,31 +58,37 @@
 			<div id="profile">
 				<button
 					class="avatar-btn"
-					onclick={() => toggle("dropdown")}
+					on:click={() => toggle("dropdown")}
 					aria-expanded={dropdownOpen}
 					aria-controls="dropdown"
 				>
-					<img src={currentUser.photoURL ?? "/default-avatar.svg"} alt="User avatar" class="avatar" />
+					<img
+						src={currentUser.photoURL ?? "/default-avatar.svg"}
+						alt="User avatar"
+						class="avatar"
+					/>
 				</button>
 
 				{#if dropdownOpen}
 					<div id="dropdown" role="menu" transition:fade>
 						<p id="username">{currentUser.displayName}</p>
 						<a href="/app" role="menuitem">Dashboard</a>
-						<button type="button" onclick={signOut} role="menuitem">Sign Out</button>
+						<button type="button" on:click={signOut} role="menuitem">
+							Sign Out
+						</button>
 					</div>
 				{/if}
 			</div>
 		{:else}
-			<button id="signin" onclick={() => toggle("signin")}>Sign In</button>
+			<button id="signin" on:click={() => toggle("signin")}>Sign In</button>
 		{/if}
 	</header>
 
 	{#if signInOpen}
 		<div
 			id="authBackdrop"
-			onclick={closeModal}
-			onkeydown={(e) => (e.key === "Escape" || e.key === "Enter") && closeModal()}
+			on:click={closeModal}
+			on:keydown={(e) => (e.key === "Escape" || e.key === "Enter") && closeModal()}
 			role="presentation"
 			transition:fade
 		>
@@ -91,15 +97,15 @@
 				tabindex="0"
 				role="dialog"
 				aria-modal="true"
-				onclick={(e) => e.stopPropagation()}
+				on:click={(e) => e.stopPropagation()}
 				transition:fade
 			>
-				<button type="button" class="close-btn" aria-label="Close" onclick={closeModal}>
+				<button type="button" class="close-btn" aria-label="Close" on:click={closeModal}>
 					&times;
 				</button>
 				<h2>Continue to XiövWrites</h2>
 				<div id="provider">
-					<button onclick={loginWithGoogle} aria-label="Log in with Google">
+					<button on:click={loginWithGoogle} aria-label="Log in with Google">
 						<svg height="32" width="32" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
 							<path
 								fill="currentColor"
@@ -108,7 +114,8 @@
 						</svg>
 						<span>Log in with Google</span>
 					</button>
-					<button onclick={loginWithGithub} aria-label="Log in with GitHub">
+
+					<button on:click={loginWithGithub} aria-label="Log in with GitHub">
 						<svg height="32" width="32" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
 							<path
 								fill="currentColor"
@@ -122,7 +129,7 @@
 		</div>
 	{/if}
 
-	@render
+	{@render children?.()}
 {/if}
 
 
