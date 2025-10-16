@@ -1,55 +1,48 @@
 <script lang="ts">
 	import "$styles/global.scss";
-	import { fade } from "svelte/transition";
+	import { fade, slide } from "svelte/transition";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { auth, loginWithGoogle, loginWithGithub, logout } from "$lib/services/firebase/auth";
-	import { onAuthStateChanged, signOut as fbSignOut, type User } from "firebase/auth";
+	import { tick } from "svelte";
+	import {
+		auth,
+		loginWithGoogle,
+		loginWithGithub,
+		logout
+	} from "$lib/services/firebase/auth";
+	import { onAuthStateChanged, type User } from "firebase/auth";
 
 	let { children } = $props();
 
 	let dropdownOpen = $state(false);
 	let signInOpen = $state(false);
 	let loading = $state(true);
-	let currentUser: User | null = null;
+	let currentUser: User | null = $state(null);
 
 	$effect(() => {
-		console.log("[layout] Setting up auth listener…");
-		// fallback if auth never responds in time
-		let done = false;
-		const timeout = setTimeout(() => {
-			if (!done) {
-				console.warn("[layout] Auth listener timeout — proceeding anyway");
-				loading = false;
-			}
-		}, 5000);
+		console.log("[layout] Initializing auth listener…");
 
-		const unsubscribe = onAuthStateChanged(
-			auth,
-			(user) => {
-				done = true;
-				clearTimeout(timeout);
-				console.log("[layout] auth state changed:", user);
-				currentUser = user;
-				loading = false;
+		const unsubscribe = onAuthStateChanged(auth, async (user) => {
+			console.log("[layout] Auth state:", user);
+			currentUser = user;
+			loading = false;
 
-				if (user && page.url.pathname !== "/app") {
-					console.log("[layout] redirecting to /app");
-					goto("/app");
-				}
-			},
-			(error) => {
-				done = true;
-				clearTimeout(timeout);
-				console.error("[layout] auth listener error:", error);
-				loading = false;
+			await tick();
+
+			const path = $page.url.pathname;
+			if (user && !path.startsWith("/app")) {
+				console.log("[layout] Redirecting → /app");
+				goto("/app");
 			}
-		);
+			if (!user && path.startsWith("/app")) {
+				console.log("[layout] No user, redirecting → /");
+				goto("/");
+			}
+		});
 
 		return () => {
-			clearTimeout(timeout);
 			unsubscribe();
-			console.log("[layout] unsubscribed auth listener");
+			console.log("[layout] Auth listener removed");
 		};
 	});
 
@@ -66,7 +59,7 @@
 			currentUser = null;
 			dropdownOpen = false;
 			goto("/");
-			console.log("[layout] signed out, navigated to /");
+			console.log("[layout] Signed out → /");
 		} catch (err) {
 			console.error("[layout] signOut error:", err);
 		}
@@ -80,16 +73,16 @@
 	</div>
 {:else}
 	<header class="header">
-		<div id="brand" on:click={() => goto("/")}>
+		<div id="brand" onclick={() => goto("/")} class="brand" transition:fade>
 			<img src="/favicon.svg" alt="XiövWrites logo" width="32" height="32" />
 			<span>XiövWrites</span>
 		</div>
 
 		{#if currentUser}
-			<div id="profile">
+			<div id="profile" class="profile" transition:fade>
 				<button
 					class="avatar-btn"
-					on:click={() => toggle("dropdown")}
+					onclick={() => toggle("dropdown")}
 					aria-expanded={dropdownOpen}
 					aria-controls="dropdown"
 				>
@@ -97,40 +90,40 @@
 				</button>
 
 				{#if dropdownOpen}
-					<div id="dropdown" role="menu" transition:fade>
+					<div id="dropdown" role="menu" transition:slide={{ duration: 180 }}>
 						<p id="username">{currentUser.displayName}</p>
 						<a href="/app" role="menuitem">Dashboard</a>
-						<button type="button" on:click={signOut} role="menuitem">Sign Out</button>
+						<button type="button" onclick={signOut} role="menuitem">Sign Out</button>
 					</div>
 				{/if}
 			</div>
 		{:else}
-			<button id="signin" on:click={() => toggle("signin")}>Sign In</button>
+			<button id="signin" onclick={() => toggle("signin")} transition:fade>Sign In</button>
 		{/if}
 	</header>
 
 	{#if signInOpen}
 		<div
 			id="authBackdrop"
-			on:click={closeModal}
-			on:keydown={(e) => (e.key === "Escape" || e.key === "Enter") && closeModal()}
+			onclick={closeModal}
+			onkeydown={(e) => (e.key === "Escape" || e.key === "Enter") && closeModal()}
 			role="presentation"
-			transition:fade
+			transition:fade={{ duration: 150 }}
 		>
 			<div
 				id="authModal"
 				tabindex="0"
 				role="dialog"
 				aria-modal="true"
-				on:click={(e) => e.stopPropagation()}
-				transition:fade
+				onclick={(e) => e.stopPropagation()}
+				transition:slide={{ y: 20, duration: 200 }}
 			>
-				<button type="button" class="close-btn" aria-label="Close" on:click={closeModal}>
+				<button type="button" class="close-btn" aria-label="Close" onclick={closeModal}>
 					&times;
 				</button>
 				<h2>Continue to XiövWrites</h2>
 				<div id="provider">
-					<button on:click={loginWithGoogle} aria-label="Log in with Google">
+					<button onclick={loginWithGoogle} aria-label="Log in with Google">
 						<svg height="32" width="32" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
 							<path
 								fill="currentColor"
@@ -139,7 +132,7 @@
 						</svg>
 						<span>Log in with Google</span>
 					</button>
-					<button on:click={loginWithGithub} aria-label="Log in with GitHub">
+					<button onclick={loginWithGithub} aria-label="Log in with GitHub">
 						<svg height="32" width="32" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
 							<path
 								fill="currentColor"
@@ -153,7 +146,7 @@
 		</div>
 	{/if}
 
-	{@render children?.() }
+	{@render children()}
 {/if}
 
 <style lang="scss">
@@ -166,7 +159,7 @@ $modal-bg: color.scale(v.$color-dark, $lightness: 4%);
 $hover-bg: color.scale($button, $alpha: -0.85%);
 $shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 
-/* ========== Loading Screen ========== */
+/* === Loading Screen === */
 .loading-screen {
 	display: flex;
 	flex-direction: column;
@@ -177,7 +170,6 @@ $shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 	color: $button;
 	font-family: system-ui, sans-serif;
 	gap: 1rem;
-
 	p {
 		font-weight: 600;
 		font-size: 1.2rem;
@@ -197,23 +189,19 @@ $shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 	}
 }
 
-/* ========== Header & Brand ========== */
-header {
+/* === Header === */
+.header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 1rem 2rem;
 	color: v.$color-light;
-	font-family: system-ui, sans-serif;
 
-	#brand {
+	.brand {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-
-		img {
-			border-radius: 6px;
-		}
+		cursor: pointer;
 		span {
 			font-weight: 600;
 			font-size: 1.25rem;
@@ -235,16 +223,11 @@ header {
 			background-color: $hover-bg;
 			transform: translateY(-1px);
 		}
-
-		&:focus-visible {
-			outline: 2px solid $button;
-			outline-offset: 3px;
-		}
 	}
 }
 
-/* ========== Profile & Dropdown ========== */
-#profile {
+/* === Dropdown === */
+.profile {
 	position: relative;
 
 	.avatar-btn {
@@ -252,9 +235,6 @@ header {
 		background: transparent;
 		padding: 0;
 		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 	}
 
 	.avatar {
@@ -263,7 +243,6 @@ header {
 		border-radius: 50%;
 		object-fit: cover;
 		transition: transform 0.2s ease;
-
 		&:hover {
 			transform: scale(1.05);
 		}
@@ -280,23 +259,16 @@ header {
 		min-width: 10rem;
 		z-index: 10;
 
-		#username {
-			font-weight: 600;
-			margin-bottom: 0.5rem;
-		}
-
 		a,
 		button {
 			display: block;
 			width: 100%;
 			text-align: left;
 			color: v.$color-light;
-			text-decoration: none;
 			background: none;
 			border: none;
 			padding: 0.45rem 0;
 			cursor: pointer;
-			transition: color 0.15s ease;
 
 			&:hover {
 				color: #ffcc00;
@@ -305,7 +277,7 @@ header {
 	}
 }
 
-/* ========== Auth Modal ========== */
+/* === Modal === */
 #authBackdrop {
 	position: fixed;
 	inset: 0;
@@ -324,19 +296,16 @@ header {
 	padding: 2.25rem 2rem;
 	box-shadow: $shadow;
 	text-align: center;
-	position: relative;
 	width: min(90%, 400px);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
-	transition: transform 0.25s ease;
 
 	h2 {
 		font-size: 1.5rem;
 		margin-bottom: 1rem;
 		font-weight: 600;
-		line-height: 1.3;
 	}
 
 	#provider {
@@ -344,7 +313,6 @@ header {
 		flex-direction: column;
 		gap: 0.75rem;
 		width: 100%;
-		margin-top: 0.5rem;
 
 		button {
 			display: flex;
@@ -358,22 +326,13 @@ header {
 			color: $button;
 			cursor: pointer;
 			font-weight: 500;
-			width: 100%;
 			transition: all 0.25s ease;
-
-			svg {
-				@include icons(2em, v.$color-light);
-			}
+			width: 100%;
 
 			&:hover {
 				background: $hover-bg;
 				text-shadow: 0 0 5px $button;
 				transform: translateY(-1px);
-			}
-
-			&:focus-visible {
-				outline: 2px solid $button;
-				outline-offset: 3px;
 			}
 		}
 	}
@@ -390,20 +349,10 @@ header {
 		line-height: 1;
 		padding: 0.25rem;
 		border-radius: 50%;
-		transition:
-			transform 0.25s ease,
-			color 0.25s ease,
-			background 0.25s ease;
-
+		transition: transform 0.25s ease, color 0.25s ease;
 		&:hover {
 			transform: rotate(90deg);
 			color: #ff5555;
-			background: rgba(255, 255, 255, 0.1);
-		}
-
-		&:focus-visible {
-			outline: 2px solid #ff5555;
-			outline-offset: 3px;
 		}
 	}
 }
